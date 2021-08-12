@@ -57,77 +57,117 @@ function maopao(){
     console.log(arr);
 }
 
-//快速排序
-const quickSort = (array) => {
-    const sort = (arr, left = 0, right = arr.length - 1) => {
-     if (left >= right) {//如果左边的索引大于等于右边的索引说明整理完毕
-      return
-     }
-    let i = left
-    let j = right
-    const baseVal = arr[j] // 取无序数组最后一个数为基准值
-    while (i < j) {//把所有比基准值小的数放在左边大的数放在右边
-     while (i < j && arr[i] <= baseVal) { //找到一个比基准值大的数交换
-      i++
-     }
-     arr[j] = arr[i] // 将较大的值放在右边如果没有比基准值大的数就是将自己赋值给自己（i 等于 j）
-     while (j > i && arr[j] >= baseVal) { //找到一个比基准值小的数交换
-      j--
-    }
-     arr[i] = arr[j] // 将较小的值放在左边如果没有找到比基准值小的数就是将自己赋值给自己（i 等于 j）
-    }
-    arr[j] = baseVal // 将基准值放至中央位置完成一次循环（这时候 j 等于 i ）
-    sort(arr, left, j-1) // 将左边的无序数组重复上面的操作
-    sort(arr, j+1, right) // 将右边的无序数组重复上面的操作
-    }
-    const newArr = array.concat() // 为了保证这个函数是纯函数拷贝一次数组
-    sort(newArr)
-    return newArr
-   }
+function swapNum(a,b){
+    a = [b,[b=a]][0];
+}
 
-function kuaisu(arr,left,right) {
+//快速排序
+function quickSort(arr,left,right) {
     if(left >= right){
         return;
     }
     let i = left;
     let j = right;
-    let key = arr[i];
-    while(true){
-        //从左向右找比key大的值
-        while(arr[++i] < key){
-            if(i === right){
-                break;
-            }
-        }
-        while(arr[--j] > key){
-            if(j === left){
-                break;
-            }
-        }
-        if(i>=j)break;
+    let key = arr[left];
+    
+    while(i < j){
+        while(i < j && arr[j] >= key) --j;
+        arr[i] = arr[j];
+        while(i < j && arr[i] <= key) ++i;
+        arr[j] = arr[i];
+    }
+    arr [i] = key;
 
-        arr[i] = [arr[j],arr[j] = arr[i]][0];
+    quickSort(arr,left,i-1);
+    quickSort(arr,i+1,right);
+}
+
+//插入排序
+function insertSort(){
+    for (let i =1;i<arr.length;i++){
+        //当前要插入的数值
+        let value = arr[i];
+        //已经有序列的数组最大索引
+        let position = i;
+        //从后往前遍历有序数组找到比当前数字大的第一个值，放在它的后边。
+        while(position > 0 && arr[position-1]>value){
+            arr[position] = arr[position-1];
+            position --;
+        }
+        arr[position] = value;
+    }
+    return arr;
+}
+
+/**
+ * 选择排序
+ * 将未排序部分的最小数值，放在已排序数组的末尾
+ */
+function chooseSort(){
+   
+    for(let i = 0;i<arr.length;++i){
+        let min = arr[i];
+        let minIndex = i;
+        for (let j = i + 1;j<arr.length;++j){
+            if(arr[j]<min){
+                min = arr[j];
+                minIndex = j;
+            }
+        }
+        arr[i] = [arr[minIndex],arr[minIndex] = arr[i]][0];
+    }
+    return arr;
+}
+
+/**
+ * 归并排序
+ * 时间复杂度nlogn,空间复杂度On
+ * 稳定排序算法，合并的时候，总先放入左边的序列数组，所以就是稳定的。
+ */
+function guibing(ar,low,high){
+    //跳出条件
+    if(low >= high){
+        return;
     }
 
-    arr[left] = [arr[j],arr[j] = arr[left]][0];
-    kuaisu(arr,left,j-1);
-    kuaisu(arr,j+1,right);
+    //分成两部分
+    
 }
+
+/**
+ * 快速排序
+ * 时间复杂度nlogn，空间复杂度O1
+ * 不稳定的排序算法
+ */
+
+
+/**
+ * 桶排序
+ */
+
+/**
+ * 计数排序
+ * 时间复杂度 On,空间复杂度On
+ * 稳定的排序算法，对数据要求比较苛刻
+ */
+
+
+/**
+ * 基数排序
+ * 例如手机号排序，低位到高位分别实现计数排序。
+ * 时间复杂度o(dn)，d代表维度
+ * 稳定的排序算法
+ */
+
 destroyArr();
 maopao();
 destroyArr();
-kuaisu(arr,0,arr.length);
-console.log(quickSort(arr));
+quickSort(arr,0,arr.length-1);
+console.log(arr);
+destroyArr();
+console.log(insertSort());
 
-// for (let i = 0;i<10;i++){
-//     setTimeout(()=>{
-//         console.log(i);
-//     },100);
-// }
-
-// for (var x = 0;x<10;x++){
-//     setTimeout(()=>{
-//         console.log(x);
-//     },100);
-// }
-console.log(1<<4);
+destroyArr();
+console.log("选择排序",chooseSort());
+destroyArr();
+guibing(arr,0,arr.length-1);
